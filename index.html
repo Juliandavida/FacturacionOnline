@@ -152,7 +152,8 @@ button {
 <div class="header">
 
 <div style="width:150px; display:flex; align-items:center;">
-<img src="https://i.postimg.cc/QCpjhxQZ/logo.png" style="height:120px;">
+<img src="logo.png" style="height:120px;">
+
 </div>
 
 <div class="titulo">
@@ -323,25 +324,35 @@ function recalcularTotales() {
 }
 
 async function generarPDF() {
+    const factura = document.getElementById("factura");
 
-	const botones = document.querySelectorAll(".no-print");
-	botones.forEach(b => b.style.display = "none");
+    // Esperar a que todas las imágenes carguen
+    const images = factura.getElementsByTagName("img");
+    for (let img of images) {
+        if (!img.complete) {
+            await new Promise(resolve => {
+                img.onload = resolve;
+                img.onerror = resolve;
+            });
+        }
+    }
 
-	const { jsPDF } = window.jspdf;
-	const factura = document.getElementById("factura");
+    const canvas = await html2canvas(factura, {
+        useCORS: true,
+        scale: 2
+    });
 
-	const canvas = await html2canvas(factura);
-	const imgData = canvas.toDataURL("image/png");
+    const imgData = canvas.toDataURL("image/png");
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
 
-	const pdf = new jsPDF("p", "mm", "a4");
-	const width = pdf.internal.pageSize.getWidth();
-	const height = (canvas.height * width) / canvas.width;
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
 
-	pdf.addImage(imgData, "PNG", 0, 5, width, height);
-	pdf.save("factura.pdf");
-
-	botones.forEach(b => b.style.display = "block");
+    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    pdf.save("factura.pdf");
 }
+
 
 </script>
 
