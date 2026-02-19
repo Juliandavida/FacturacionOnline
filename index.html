@@ -107,19 +107,12 @@ input.producto {
 }
 
 button {
-    margin-top: 15px;
+    margin-top: 20px;
     padding: 8px 15px;
     background: #1c3faa;
     color: white;
     border: none;
     cursor: pointer;
-}
-
-.eliminarBtn {
-    background: red;
-    color: white;
-    padding: 3px 6px;
-    font-size: 10px;
 }
 
 @media print {
@@ -215,12 +208,7 @@ oninput="recalcularTotales()">%)</td>
 </tr>
 </table>
 
-<div class="no-print">
-<button onclick="agregarFila()">Agregar Producto</button>
-<button onclick="guardarDatos()">Guardar Editable</button>
-<button onclick="generarPDF()">Descargar PDF</button>
-<input type="file" onchange="cargarDatos(event)">
-</div>
+<button class="no-print" onclick="generarPDF()">Descargar PDF</button>
 
 </div>
 
@@ -231,7 +219,12 @@ oninput="recalcularTotales()">%)</td>
 
 let tabla = document.getElementById("tablaProductos");
 
-function agregarFila(datos = null) {
+// Crear 10 filas fijas
+for (let i = 0; i < 10; i++) {
+    agregarFila();
+}
+
+function agregarFila() {
 
 let fila = document.createElement("tr");
 
@@ -239,25 +232,10 @@ fila.innerHTML = `
 <td><input type="number" class="producto cantidad" oninput="calcular(this)"></td>
 <td><input type="text" class="producto descripcion" oninput="calcular(this)"></td>
 <td><input type="number" class="producto precio" oninput="calcular(this)"></td>
-<td>
-<span class="totalProducto"></span>
-<button class="eliminarBtn no-print" onclick="eliminarFila(this)">X</button>
-</td>
+<td><span class="totalProducto"></span></td>
 `;
 
-if (datos) {
-fila.querySelector(".cantidad").value = datos.cantidad;
-fila.querySelector(".descripcion").value = datos.descripcion;
-fila.querySelector(".precio").value = datos.precio;
-}
-
 tabla.appendChild(fila);
-recalcularTotales();
-}
-
-function eliminarFila(btn) {
-btn.closest("tr").remove();
-recalcularTotales();
 }
 
 function calcular(input) {
@@ -298,6 +276,9 @@ document.getElementById("totalFinal").innerText = subtotal.toFixed(0) || "";
 
 async function generarPDF() {
 
+const botones = document.querySelectorAll(".no-print");
+botones.forEach(b => b.style.display = "none");
+
 const { jsPDF } = window.jspdf;
 const factura = document.getElementById("factura");
 
@@ -310,68 +291,9 @@ const height = (canvas.height * width) / canvas.width;
 
 pdf.addImage(imgData, "PNG", 0, 5, width, height);
 pdf.save("factura.pdf");
+
+botones.forEach(b => b.style.display = "inline-block");
 }
-
-function guardarDatos() {
-
-let productos = [];
-
-document.querySelectorAll("#tablaProductos tr").forEach(fila => {
-productos.push({
-cantidad: fila.querySelector(".cantidad").value,
-descripcion: fila.querySelector(".descripcion").value,
-precio: fila.querySelector(".precio").value
-});
-});
-
-let datos = {
-numero: document.getElementById("numeroFactura").value,
-cliente: document.getElementById("cliente").value,
-direccion: document.getElementById("direccion").value,
-fecha: document.getElementById("fecha").value,
-nit: document.getElementById("nit").value,
-iva: document.getElementById("ivaInput").value,
-productos: productos
-};
-
-let blob = new Blob([JSON.stringify(datos)], { type: "application/json" });
-let link = document.createElement("a");
-link.href = URL.createObjectURL(blob);
-link.download = "factura_editable.json";
-link.click();
-}
-
-function cargarDatos(event) {
-
-let archivo = event.target.files[0];
-if (!archivo) return;
-
-let reader = new FileReader();
-
-reader.onload = function(e) {
-
-let datos = JSON.parse(e.target.result);
-
-document.getElementById("numeroFactura").value = datos.numero;
-document.getElementById("cliente").value = datos.cliente;
-document.getElementById("direccion").value = datos.direccion;
-document.getElementById("fecha").value = datos.fecha;
-document.getElementById("nit").value = datos.nit;
-document.getElementById("ivaInput").value = datos.iva;
-
-tabla.innerHTML = "";
-
-datos.productos.forEach(prod => {
-agregarFila(prod);
-});
-
-recalcularTotales();
-};
-
-reader.readAsText(archivo);
-}
-
-agregarFila();
 
 </script>
 
