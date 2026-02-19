@@ -107,7 +107,7 @@ input.producto {
 }
 
 button {
-    margin-top: 20px;
+    margin-top: 15px;
     padding: 8px 15px;
     background: #1c3faa;
     color: white;
@@ -154,24 +154,24 @@ No. <input type="number" id="numeroFactura" value="1">
 <div>
 <div class="campo">
 <label>Cotizado a:</label>
-<input type="text" id="cliente">
+<input type="text">
 </div>
 
 <div class="campo">
 <label>Dirección:</label>
-<input type="text" id="direccion">
+<input type="text">
 </div>
 </div>
 
 <div>
 <div class="campo">
 <label>Fecha:</label>
-<input type="date" id="fecha">
+<input type="date">
 </div>
 
 <div class="campo">
 <label>C.C. ó NIT:</label>
-<input type="text" id="nit">
+<input type="text">
 </div>
 </div>
 
@@ -208,7 +208,10 @@ oninput="recalcularTotales()">%)</td>
 </tr>
 </table>
 
-<button class="no-print" onclick="generarPDF()">Descargar PDF</button>
+<div class="no-print">
+<button onclick="agregarFila()">Agregar Producto</button>
+<button onclick="generarPDF()">Descargar PDF</button>
+</div>
 
 </div>
 
@@ -219,16 +222,23 @@ oninput="recalcularTotales()">%)</td>
 
 let tabla = document.getElementById("tablaProductos");
 
-// 🔥 18 FILAS FIJAS
+// 🔥 18 filas iniciales
 for (let i = 0; i < 18; i++) {
+    agregarFila();
+}
 
-tabla.innerHTML += `
-<tr>
+function agregarFila() {
+
+let fila = document.createElement("tr");
+
+fila.innerHTML = `
 <td><input type="number" class="producto cantidad" oninput="calcular(this)"></td>
 <td><input type="text" class="producto descripcion" oninput="calcular(this)"></td>
 <td><input type="number" class="producto precio" oninput="calcular(this)"></td>
 <td><span class="totalProducto"></span></td>
-</tr>`;
+`;
+
+tabla.appendChild(fila);
 }
 
 function calcular(input) {
@@ -269,8 +279,8 @@ document.getElementById("totalFinal").innerText = subtotal.toFixed(0) || "";
 
 async function generarPDF() {
 
-const boton = document.querySelector(".no-print");
-boton.style.display = "none";
+const botones = document.querySelector(".no-print");
+botones.style.display = "none";
 
 const { jsPDF } = window.jspdf;
 const factura = document.getElementById("factura");
@@ -285,7 +295,7 @@ const height = (canvas.height * width) / canvas.width;
 pdf.addImage(imgData, "PNG", 0, 5, width, height);
 pdf.save("factura.pdf");
 
-boton.style.display = "inline-block";
+botones.style.display = "block";
 }
 
 </script>
