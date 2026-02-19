@@ -1,343 +1,379 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-	<meta charset="UTF-8">
-	<title>Factura</title>
+<meta charset="UTF-8">
+<title>Factura</title>
 
-	<style>
-		body {
-			font-family: Arial, sans-serif;
-			display: flex;
-			justify-content: center;
-			padding: 20px;
-		}
+<style>
+body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
 
-		.factura {
-			width: 850px;
-			border: 2px solid #1c3faa;
-			padding: 15px;
-		}
+.factura {
+    width: 850px;
+    border: 2px solid #1c3faa;
+    padding: 15px;
+}
 
-		.header {
-			display: flex;
-			justify-content: space-between;
-			border-bottom: 2px solid #1c3faa;
-			padding-bottom: 10px;
-		}
+.header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 2px solid #1c3faa;
+    padding-bottom: 10px;
+}
 
-		.titulo {
-			text-align: center;
-			flex: 1;
-		}
+.titulo {
+    text-align: center;
+    flex: 1;
+}
 
-			.titulo h1 {
-				margin: 0;
-				color: #1c3faa;
-			}
+.titulo h1 {
+    margin: 0;
+    color: #1c3faa;
+}
 
-		.tipo-doc {
-			width: 180px;
-			text-align: left;
-		}
+.tipo-doc {
+    width: 180px;
+    text-align: left;
+}
 
-			.tipo-doc label {
-				display: block;
-				margin-bottom: 5px;
-			}
+.numero {
+    color: red;
+    font-weight: bold;
+    margin-top: 5px;
+}
 
-		.numero {
-			color: red;
-			font-weight: bold;
-			margin-top: 5px;
-		}
+.numero input {
+    width: 70px;
+    border: none;
+    border-bottom: 1px solid red;
+    color: red;
+    font-weight: bold;
+    text-align: center;
+}
 
-			.numero input {
-				width: 70px;
-				border: none;
-				border-bottom: 1px solid red;
-				color: red;
-				font-weight: bold;
-				text-align: center;
-			}
+.info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
 
-		.info {
-			display: flex;
-			justify-content: space-between;
-			margin-top: 15px;
-		}
+.campo {
+    margin-bottom: 8px;
+}
 
-		.campo {
-			margin-bottom: 8px;
-		}
+.campo label {
+    display: inline-block;
+    width: 110px;
+    font-weight: bold;
+}
 
-			.campo label {
-				display: inline-block;
-				width: 110px;
-				font-weight: bold;
-			}
+.campo input {
+    border: none;
+    border-bottom: 1px solid black;
+    width: 200px;
+}
 
-			.campo input {
-				border: none;
-				border-bottom: 1px solid black;
-				width: 200px;
-			}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
 
-		table {
-			width: 100%;
-			border-collapse: collapse;
-			margin-top: 20px;
-		}
+th, td {
+    border: 1px solid #1c3faa;
+    padding: 5px;
+    text-align: center;
+    font-size: 13px;
+}
 
-		th, td {
-			border: 1px solid #1c3faa;
-			padding: 5px;
-			text-align: center;
-			font-size: 13px;
-		}
+th {
+    background: #dbe5ff;
+}
 
-		th {
-			background: #dbe5ff;
-		}
+input.producto {
+    width: 95%;
+    border: none;
+    text-align: center;
+}
 
-		tbody tr:nth-child(even) {
-			background: #eef3ff;
-		}
+.totales {
+    width: 300px;
+    float: right;
+    margin-top: 20px;
+}
 
-		input.producto {
-			width: 95%;
-			border: none;
-			text-align: center;
-		}
+button {
+    margin-top: 15px;
+    padding: 8px 15px;
+    background: #1c3faa;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
 
-		.vacio input {
-			color: transparent;
-		}
+.eliminarBtn {
+    background: red;
+    color: white;
+    padding: 3px 6px;
+    font-size: 10px;
+}
 
-		.vacio span {
-			visibility: hidden;
-		}
-
-		.totales {
-			width: 300px;
-			float: right;
-			margin-top: 20px;
-		}
-
-			.totales td {
-				border: 1px solid #1c3faa;
-			}
-
-		button {
-			margin-top: 30px;
-			padding: 10px 20px;
-			background: #1c3faa;
-			color: white;
-			border: none;
-			cursor: pointer;
-		}
-
-		@media print {
-			.no-print {
-				display: none;
-			}
-		}
-	</style>
+@media print {
+    .no-print {
+        display: none;
+    }
+}
+</style>
 </head>
 
 <body>
 
-	<div class="factura" id="factura">
+<div class="factura" id="factura">
 
-		<div class="header">
+<div class="header">
 
-			<div style="width:150px; display:flex; align-items:center;">
-				<img src="https://i.postimg.cc/QCpjhxQZ/logo.png" style="height:120px;">
-			</div>
+<div style="width:150px; display:flex; align-items:center;">
+<img src="https://i.postimg.cc/QCpjhxQZ/logo.png" style="height:120px;">
+</div>
 
-			<div class="titulo">
-				<h1>CITARÁ FERRETERÍA</h1>
-				<p>NIT: 1.078.918.733-6</p>
-				<p>La Cascorba diagonal al Guaje - Quibdó, Chocó</p>
-			</div>
+<div class="titulo">
+<h1>CITARÁ FERRETERÍA</h1>
+<p>NIT: 1.078.918.733-6</p>
+<p>Quibdó, Chocó</p>
+</div>
 
-			<div class="tipo-doc">
-				<label><input type="checkbox"> Cotización</label>
-				<label><input type="checkbox"> Remisión</label>
+<div class="tipo-doc">
+<label><input type="checkbox"> Cotización</label>
+<label><input type="checkbox"> Remisión</label>
+<div class="numero">
+No. <input type="number" id="numeroFactura" value="1">
+</div>
+</div>
 
-				<div class="numero">
-					No. <input type="number" value="0">
-				</div>
-			</div>
+</div>
 
-		</div>
+<div class="info">
 
+<div>
+<div class="campo">
+<label>Cotizado a:</label>
+<input type="text" id="cliente">
+</div>
 
-		<div class="info">
+<div class="campo">
+<label>Dirección:</label>
+<input type="text" id="direccion">
+</div>
+</div>
 
-			<div>
-				<div class="campo">
-					<label>Cotizado a:</label>
-					<input type="text">
-				</div>
+<div>
+<div class="campo">
+<label>Fecha:</label>
+<input type="date" id="fecha">
+</div>
 
-				<div class="campo">
-					<label>Dirección:</label>
-					<input type="text">
-				</div>
-			</div>
+<div class="campo">
+<label>C.C. ó NIT:</label>
+<input type="text" id="nit">
+</div>
+</div>
 
-			<div>
-				<div class="campo">
-					<label>Fecha:</label>
-					<input type="date">
-				</div>
+</div>
 
-				<div class="campo">
-					<label>C.C. ó NIT:</label>
-					<input type="text">
-				</div>
-			</div>
+<table>
+<thead>
+<tr>
+<th style="width:10%;">CANT</th>
+<th style="width:50%;">DESCRIPCIÓN</th>
+<th style="width:20%;">Vr. UNITARIO</th>
+<th style="width:20%;">Vr. TOTAL</th>
+</tr>
+</thead>
+<tbody id="tablaProductos"></tbody>
+</table>
 
-		</div>
+<table class="totales">
+<tr>
+<td>SUBTOTAL</td>
+<td>$<span id="subtotal"></span></td>
+</tr>
 
-		<table style="width:100%; border-collapse: collapse;">
-			<thead>
-				<tr>
-					<th style="width:10%;">CANT</th>
-					<th style="width:50%;">DESCRIPCIÓN</th>
-					<th style="width:20%;">Vr. UNITARIO</th>
-					<th style="width:20%;">Vr. TOTAL</th>
-				</tr>
-			</thead>
+<tr id="filaIVA">
+<td>IVA (<input type="number" id="ivaInput" value="19"
+style="width:50px;border:none;border-bottom:1px solid black;text-align:center;"
+oninput="recalcularTotales()">%)</td>
+<td>$<span id="iva"></span></td>
+</tr>
 
-			<tbody id="tablaProductos"></tbody>
-		</table>
+<tr>
+<td><strong>TOTAL</strong></td>
+<td><strong>$<span id="totalFinal"></span></strong></td>
+</tr>
+</table>
 
-		<table class="totales">
-			<tr>
-				<td>SUBTOTAL</td>
-				<td>$<span id="subtotal"></span></td>
-			</tr>
+<div class="no-print">
+<button onclick="agregarFila()">Agregar Producto</button>
+<button onclick="guardarDatos()">Guardar Editable</button>
+<button onclick="generarPDF()">Descargar PDF</button>
+<input type="file" onchange="cargarDatos(event)">
+</div>
 
-			<tr id="filaIVA">
-				<td>
-					IVA (<input type="number" id="ivaInput" value="19"
-						   style="width:50px;border:none;border-bottom:1px solid black;text-align:center;"
-						   oninput="recalcularTotales()">%)
-				</td>
-				<td>$<span id="iva"></span></td>
-			</tr>
+</div>
 
-			<tr>
-				<td><strong>TOTAL</strong></td>
-				<td><strong>$<span id="totalFinal"></span></strong></td>
-			</tr>
-		</table>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
-		<button class="no-print" onclick="generarPDF()">Descargar PDF</button>
+<script>
 
-	</div>
+let tabla = document.getElementById("tablaProductos");
 
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+function agregarFila(datos = null) {
 
-	<script>
+let fila = document.createElement("tr");
 
-		let tabla = document.getElementById("tablaProductos");
+fila.innerHTML = `
+<td><input type="number" class="producto cantidad" oninput="calcular(this)"></td>
+<td><input type="text" class="producto descripcion" oninput="calcular(this)"></td>
+<td><input type="number" class="producto precio" oninput="calcular(this)"></td>
+<td>
+<span class="totalProducto"></span>
+<button class="eliminarBtn no-print" onclick="eliminarFila(this)">X</button>
+</td>
+`;
 
-		for (let i = 0; i < 18; i++) {
-			tabla.innerHTML += `
-		<tr class="vacio">
-			<td><input type="number" class="producto cantidad" oninput="calcular(this)"></td>
-			<td><input type="text" class="producto descripcion" oninput="calcular(this)"></td>
-			<td><input type="number" class="producto precio" oninput="calcular(this)"></td>
-			<td><span class="totalProducto"></span></td>
-		</tr>`;
-		}
+if (datos) {
+fila.querySelector(".cantidad").value = datos.cantidad;
+fila.querySelector(".descripcion").value = datos.descripcion;
+fila.querySelector(".precio").value = datos.precio;
+}
 
-		function calcular(input) {
+tabla.appendChild(fila);
+recalcularTotales();
+}
 
-			let fila = input.closest("tr");
-			let cantidad = parseFloat(fila.querySelector(".cantidad").value) || 0;
-			let precio = parseFloat(fila.querySelector(".precio").value) || 0;
-			let descripcion = fila.querySelector(".descripcion").value;
+function eliminarFila(btn) {
+btn.closest("tr").remove();
+recalcularTotales();
+}
 
-			let total = cantidad * precio;
-			fila.querySelector(".totalProducto").innerText = total > 0 ? total : "";
+function calcular(input) {
 
-			if (cantidad == 0 && precio == 0 && descripcion == "") {
-				fila.classList.add("vacio");
-			} else {
-				fila.classList.remove("vacio");
-			}
+let fila = input.closest("tr");
+let cantidad = parseFloat(fila.querySelector(".cantidad").value) || 0;
+let precio = parseFloat(fila.querySelector(".precio").value) || 0;
 
-			recalcularTotales();
-		}
+let total = cantidad * precio;
+fila.querySelector(".totalProducto").innerText = total > 0 ? total : "";
 
-		function recalcularTotales() {
+recalcularTotales();
+}
 
-			let cantidades = document.querySelectorAll(".cantidad");
-			let precios = document.querySelectorAll(".precio");
+function recalcularTotales() {
 
-			let subtotal = 0;
+let subtotal = 0;
 
-			for (let i = 0; i < cantidades.length; i++) {
-				subtotal += (parseFloat(cantidades[i].value) || 0) *
-					(parseFloat(precios[i].value) || 0);
-			}
+document.querySelectorAll("#tablaProductos tr").forEach(fila => {
+let cantidad = parseFloat(fila.querySelector(".cantidad").value) || 0;
+let precio = parseFloat(fila.querySelector(".precio").value) || 0;
+subtotal += cantidad * precio;
+});
 
-			let subtotalSpan = document.getElementById("subtotal");
-			let ivaSpan = document.getElementById("iva");
-			let totalSpan = document.getElementById("totalFinal");
-			let ivaInput = document.getElementById("ivaInput");
-			let filaIVA = document.getElementById("filaIVA");
+document.getElementById("subtotal").innerText = subtotal || "";
 
-			if (subtotal == 0) {
-				subtotalSpan.innerText = "";
-				ivaSpan.innerText = "";
-				totalSpan.innerText = "";
-				filaIVA.style.display = "none";
-				return;
-			}
+let porcentaje = parseFloat(document.getElementById("ivaInput").value) || 0;
 
-			subtotalSpan.innerText = subtotal;
+if (subtotal > 0 && porcentaje > 0) {
+let iva = subtotal * (porcentaje / 100);
+document.getElementById("iva").innerText = iva.toFixed(0);
+document.getElementById("totalFinal").innerText = (subtotal + iva).toFixed(0);
+} else {
+document.getElementById("iva").innerText = "";
+document.getElementById("totalFinal").innerText = subtotal.toFixed(0) || "";
+}
+}
 
-			let porcentaje = parseFloat(ivaInput.value) || 0;
+async function generarPDF() {
 
-			if (porcentaje > 0) {
-				let iva = subtotal * (porcentaje / 100);
-				ivaSpan.innerText = iva.toFixed(0);
-				filaIVA.style.display = "";
-				totalSpan.innerText = (subtotal + iva).toFixed(0);
-			} else {
-				ivaSpan.innerText = "";
-				filaIVA.style.display = "none";
-				totalSpan.innerText = subtotal.toFixed(0);
-			}
-		}
+const { jsPDF } = window.jspdf;
+const factura = document.getElementById("factura");
 
-		async function generarPDF() {
+const canvas = await html2canvas(factura);
+const imgData = canvas.toDataURL("image/png");
 
-			const boton = document.querySelector(".no-print");
-			boton.style.display = "none";
+const pdf = new jsPDF("p", "mm", "a4");
+const width = pdf.internal.pageSize.getWidth();
+const height = (canvas.height * width) / canvas.width;
 
-			const { jsPDF } = window.jspdf;
-			const factura = document.getElementById("factura");
+pdf.addImage(imgData, "PNG", 0, 5, width, height);
+pdf.save("factura.pdf");
+}
 
-			const canvas = await html2canvas(factura);
-			const imgData = canvas.toDataURL("image/png");
+function guardarDatos() {
 
-			const pdf = new jsPDF("p", "mm", "a4");
-			const width = pdf.internal.pageSize.getWidth();
-			const height = (canvas.height * width) / canvas.width;
+let productos = [];
 
-			pdf.addImage(imgData, "PNG", 0, 5, width, height);
-			pdf.save("factura.pdf");
+document.querySelectorAll("#tablaProductos tr").forEach(fila => {
+productos.push({
+cantidad: fila.querySelector(".cantidad").value,
+descripcion: fila.querySelector(".descripcion").value,
+precio: fila.querySelector(".precio").value
+});
+});
 
-			boton.style.display = "block";
-		}
+let datos = {
+numero: document.getElementById("numeroFactura").value,
+cliente: document.getElementById("cliente").value,
+direccion: document.getElementById("direccion").value,
+fecha: document.getElementById("fecha").value,
+nit: document.getElementById("nit").value,
+iva: document.getElementById("ivaInput").value,
+productos: productos
+};
 
-	</script>
+let blob = new Blob([JSON.stringify(datos)], { type: "application/json" });
+let link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+link.download = "factura_editable.json";
+link.click();
+}
+
+function cargarDatos(event) {
+
+let archivo = event.target.files[0];
+if (!archivo) return;
+
+let reader = new FileReader();
+
+reader.onload = function(e) {
+
+let datos = JSON.parse(e.target.result);
+
+document.getElementById("numeroFactura").value = datos.numero;
+document.getElementById("cliente").value = datos.cliente;
+document.getElementById("direccion").value = datos.direccion;
+document.getElementById("fecha").value = datos.fecha;
+document.getElementById("nit").value = datos.nit;
+document.getElementById("ivaInput").value = datos.iva;
+
+tabla.innerHTML = "";
+
+datos.productos.forEach(prod => {
+agregarFila(prod);
+});
+
+recalcularTotales();
+};
+
+reader.readAsText(archivo);
+}
+
+agregarFila();
+
+</script>
 
 </body>
 </html>
