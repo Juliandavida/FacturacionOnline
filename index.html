@@ -324,9 +324,14 @@ function recalcularTotales() {
 }
 
 async function generarPDF() {
-    const factura = document.getElementById("factura");
 
-    // Esperar a que todas las imágenes carguen
+    const factura = document.getElementById("factura");
+    const botones = document.querySelector(".no-print");
+
+    // 🔴 Ocultar botones antes de generar PDF
+    botones.style.display = "none";
+
+    // Esperar que las imágenes carguen
     const images = factura.getElementsByTagName("img");
     for (let img of images) {
         if (!img.complete) {
@@ -338,7 +343,6 @@ async function generarPDF() {
     }
 
     const canvas = await html2canvas(factura, {
-        useCORS: true,
         scale: 2
     });
 
@@ -351,7 +355,11 @@ async function generarPDF() {
 
     pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
     pdf.save("factura.pdf");
+
+    // 🟢 Volver a mostrar botones después
+    botones.style.display = "block";
 }
+
 
 
 </script>
