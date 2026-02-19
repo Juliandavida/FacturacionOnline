@@ -219,23 +219,16 @@ oninput="recalcularTotales()">%)</td>
 
 let tabla = document.getElementById("tablaProductos");
 
-// Crear 10 filas fijas
-for (let i = 0; i < 10; i++) {
-    agregarFila();
-}
+// 🔥 18 FILAS FIJAS
+for (let i = 0; i < 18; i++) {
 
-function agregarFila() {
-
-let fila = document.createElement("tr");
-
-fila.innerHTML = `
+tabla.innerHTML += `
+<tr>
 <td><input type="number" class="producto cantidad" oninput="calcular(this)"></td>
 <td><input type="text" class="producto descripcion" oninput="calcular(this)"></td>
 <td><input type="number" class="producto precio" oninput="calcular(this)"></td>
 <td><span class="totalProducto"></span></td>
-`;
-
-tabla.appendChild(fila);
+</tr>`;
 }
 
 function calcular(input) {
@@ -276,8 +269,8 @@ document.getElementById("totalFinal").innerText = subtotal.toFixed(0) || "";
 
 async function generarPDF() {
 
-const botones = document.querySelectorAll(".no-print");
-botones.forEach(b => b.style.display = "none");
+const boton = document.querySelector(".no-print");
+boton.style.display = "none";
 
 const { jsPDF } = window.jspdf;
 const factura = document.getElementById("factura");
@@ -292,7 +285,7 @@ const height = (canvas.height * width) / canvas.width;
 pdf.addImage(imgData, "PNG", 0, 5, width, height);
 pdf.save("factura.pdf");
 
-botones.forEach(b => b.style.display = "inline-block");
+boton.style.display = "inline-block";
 }
 
 </script>
